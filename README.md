@@ -3,6 +3,7 @@ This is a sample utility to encrypt/decrypt using AES/CBC/PKCS5Padding algorithm
 JDK must have the unlimited strength policy for the JDK version
 
 NOTE: This example is built using JDK7, ultimate strength JCE (JDK7) and Maven 3.x
+ - http://www.oracle.com/technetwork/java/javase/downloads/jce-7-download-432124.html
 
 To Run:
 ====================
@@ -17,8 +18,8 @@ To Use:
     String key = "770A8A65DA156D24EE2A093277530142";
     AESCipher cipher = new AESCipher(key.getBytes("UTF-8"));
 
-    EncryptionUtil util = EncryptionUtil.getInstance();
+    String encryptedMessage = cipher.getEncryptedMessage("this is message");
+    String decryptedMessage = cipher.getDecryptedMessage(encryptedMessage);
 
-    String encryptedMessage = util.encrypt("this is message", cipher);
 
 

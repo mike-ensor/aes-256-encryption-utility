@@ -21,9 +21,7 @@ public class EncryptionUtilTest {
         String key = "770A8A65DA156D24EE2A093277530142";
         AESCipher cipher = new AESCipher(key.getBytes("UTF-8"));
 
-        EncryptionUtil util = EncryptionUtil.getInstance();
-
-        String encryptedMessage = util.encrypt("this is message", cipher);
+        String encryptedMessage = cipher.getEncryptedMessage("this is message");
         LOG.debug("Message is: {}", encryptedMessage);
 
         assertThat(encryptedMessage, is(notNullValue()));
@@ -35,13 +33,10 @@ public class EncryptionUtilTest {
         String key = "770A8A65DA156D24EE2A093277530142";
         AESCipher cipher = new AESCipher(key.getBytes("UTF-8"));
 
-
         String messageToEncrypt = "this is the secret message I want to encode";
 
-        EncryptionUtil util = EncryptionUtil.getInstance();
-
-        String encryptedMessage = util.encrypt(messageToEncrypt, cipher);
-        String decryptedMessage = util.decrypt(encryptedMessage, cipher);
+        String encryptedMessage = cipher.getEncryptedMessage(messageToEncrypt);
+        String decryptedMessage = cipher.getDecryptedMessage(encryptedMessage);
 
         LOG.debug("Original Message: {}, Encrypted Message: {}, Decrypted Message: {}", messageToEncrypt, encryptedMessage, decryptedMessage);
         assertThat(decryptedMessage, is(messageToEncrypt));
