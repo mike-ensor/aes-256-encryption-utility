@@ -23,4 +23,8 @@ To Use:
     String decryptedMessage = cipher.getDecryptedMessage(encryptedMessage);
 
 
+Generate an AES-256 Key
+======================
+
+    keytool -genseckey -alias jceksaes -keyalg AES -keysize 256 -storetype JCEKS -keypass mykeypass -storetype jceks -keystore aes-keystore.jck -storepass mystorepass
 
