@@ -14,9 +14,10 @@ To Run:
 To Use:
 ====================
 
-    # Some key (substitute for PBE Key, from file or from JCEKS keystore
-    String key = "770A8A65DA156D24EE2A093277530142";
-    AESCipher cipher = new AESCipher(key.getBytes("UTF-8"));
+    # Key stored in JCEKS formatted Java keystore
+    Key key = ....; // see tests pulling key from keystore
+    // alternative is to hard-code key in string
+    AESCipher cipher = new AESCipher(key);
 
     String encryptedMessage = cipher.getEncryptedMessage("this is message");
     String decryptedMessage = cipher.getDecryptedMessage(encryptedMessage);

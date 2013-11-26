@@ -11,6 +11,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
 public class AESCipher {
@@ -22,6 +23,10 @@ public class AESCipher {
     private final SecretKeySpec secretKeySpec;
     private final Cipher cipher;
     private IvParameterSpec iv;
+
+    public AESCipher(Key key) {
+        this(key.getEncoded());
+    }
 
     public AESCipher(byte[] key) {
         try {
