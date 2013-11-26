@@ -1,0 +1,20 @@
+atlassian-ide-plugin.xml
+# /
+/target
+/WEB-INF
+*.iml
+*.ipr
+*.iws
+/.idea
+.gradle
+build
+chromedriver.log
+
+# Eclipse files
+.classpath
+.project
+.settings/
+.checkstyle
+.pmd
+.pmdruleset
+.metadata
