@@ -79,4 +79,70 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.acquitygroup.encryption.MainApp</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <finalName>example-encryption-util</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>com.acquitygroup.encryption.MainApp</mainClass>
+                    <systemProperties>
+                        <!-- Keystore Location -->
+                        <systemProperty>
+                            <key>keystore</key>
+                            <value>main-aes-keystore.jck</value>
+                        </systemProperty>
+                        <!-- storepass -->
+                        <systemProperty>
+                            <key>storepass</key>
+                            <value>mystorepass</value>
+                        </systemProperty>
+                        <!-- alias -->
+                        <systemProperty>
+                            <key>alias</key>
+                            <value>jceksaes</value>
+                        </systemProperty>
+                        <!-- keypass -->
+                        <systemProperty>
+                            <key>keypass</key>
+                            <value>mykeypass</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

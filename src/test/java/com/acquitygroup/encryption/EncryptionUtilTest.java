@@ -1,15 +1,11 @@
 package com.acquitygroup.encryption;
 
-import com.google.common.io.BaseEncoding;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.*;
-import java.security.cert.CertificateException;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -49,7 +45,7 @@ public class EncryptionUtilTest {
     @Test
     public void encryptMessageFromKeystore() throws UnsupportedEncodingException {
 
-        Key key = getKeyFromKeyStore();
+        Key key = KeystoreUtil.getKeyFromKeyStore("src/test/resources/aes-keystore.jck", "mystorepass", "jceksaes", "mykeypass");
 
         AESCipher cipher = new AESCipher(key);
 
@@ -63,7 +59,7 @@ public class EncryptionUtilTest {
     @Test
     public void decryptMessageFromKeystore() throws UnsupportedEncodingException {
 
-        Key key = getKeyFromKeyStore();
+        Key key = KeystoreUtil.getKeyFromKeyStore("src/test/resources/aes-keystore.jck", "mystorepass", "jceksaes", "mykeypass");
         AESCipher cipher = new AESCipher(key);
 
         String messageToEncrypt = "this is the secret message I want to encode";
@@ -75,29 +71,4 @@ public class EncryptionUtilTest {
         assertThat(decryptedMessage, is(messageToEncrypt));
     }
 
-    private Key getKeyFromKeyStore() {
-        try {
-            InputStream keystoreStream = ClassLoader.getSystemResourceAsStream("aes-keystore.jck");
-
-            KeyStore keystore = KeyStore.getInstance("JCEKS");
-            String keystorePass = "mystorepass";
-            String keyPass = "mykeypass";
-            String alias = "jceksaes";
-
-            keystore.load(keystoreStream, keystorePass.toCharArray());
-
-            LOG.debug("Keystore with alias {} found == {}", alias, keystore.containsAlias(alias));
-            if (!keystore.containsAlias(alias)) {
-                throw new RuntimeException("Alias for key not found");
-            }
-
-            Key key = keystore.getKey(alias, keyPass.toCharArray());
-            LOG.debug("Key Found {} -> {}", key.getAlgorithm(), BaseEncoding.base64().encode(key.getEncoded()));
-
-            return key;
-
-        } catch (UnrecoverableKeyException | KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
