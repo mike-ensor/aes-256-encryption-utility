@@ -8,6 +8,12 @@
     <description>Sample Encryption</description>
     <url>http://www.acquitygroup.com/</url>
 
+    <parent>
+        <groupId>com.clickconcepts.project</groupId>
+        <artifactId>master-site-pom</artifactId>
+        <version>0.19</version>
+    </parent>
+
     <organization>
         <name>Acquity Group</name>
         <url>http://www.acquitygroup.com</url>
@@ -28,8 +34,22 @@
     </developers>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <repository.name>${project.artifactId}</repository.name>
+        <!-- Parameters for Site Docs -->
+        <scmUrl>${project.scm.url}</scmUrl>
+        <gitUrl>git@${repository.domain}:${repository.user}/${repository.name}.git</gitUrl>
+        <!-- Used for Google Search on Site Documentation page -->
+        <sitesearchValue>${repository.user}.${repository.domain}</sitesearchValue>
+
+        <!-- Override Site Documentation SCM publishing parameters  -->
+        <scm-publish.scmBranch>ghpages</scm-publish.scmBranch>
+        <scm-publish.pubScmUrl>scm:git:git@github.com:mike-ensor/${project.artifactId}.git</scm-publish.pubScmUrl>
+
+        <!-- Location of where "site" documentation is output -->
+        <siteOutputDirectory>${project.build.directory}/site/${project.artifactId}</siteOutputDirectory>
+
+        <changelog.fileUri>${changelog.github.fileUri}</changelog.fileUri>
+        <changelog.revision.fileUri>${changelog.revision.github.fileUri}</changelog.revision.fileUri>
     </properties>
 
     <dependencies>
@@ -44,7 +64,7 @@
             <groupId>com.clickconcepts.logging</groupId>
             <artifactId>clickconcepts-logging</artifactId>
             <version>0.01</version>
-            <optional>true</optional>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
