@@ -7,7 +7,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.acquitygroup" level="error" additivity="false">
+    <logger name="com.acquitygroup" level="info" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 

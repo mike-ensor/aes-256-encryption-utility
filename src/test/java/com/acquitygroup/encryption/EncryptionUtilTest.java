@@ -71,4 +71,36 @@ public class EncryptionUtilTest {
         assertThat(decryptedMessage, is(messageToEncrypt));
     }
 
+    @Test
+    public void encryptMessageFromKeystoreWithIv() throws UnsupportedEncodingException {
+
+        Key key = KeystoreUtil.getKeyFromKeyStore("src/test/resources/aes-keystore.jck", "mystorepass", "jceksaes", "mykeypass");
+        byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+        AESCipher cipher = new AESCipher(key, iv);
+
+        String encryptedMessage = cipher.getEncryptedMessage("this is message");
+        LOG.debug("Message is: {}", encryptedMessage);
+
+        assertThat(encryptedMessage, is(notNullValue()));
+        assertThat(encryptedMessage, is(not("this is message")));
+    }
+
+    @Test
+    public void decryptMessageFromKeystoreWithIv() throws UnsupportedEncodingException {
+
+        Key key = KeystoreUtil.getKeyFromKeyStore("src/test/resources/aes-keystore.jck", "mystorepass", "jceksaes", "mykeypass");
+        byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+        AESCipher cipher = new AESCipher(key, iv);
+
+        String messageToEncrypt = "this is the secret message I want to encode";
+
+        String encryptedMessage = cipher.getEncryptedMessage(messageToEncrypt);
+        String decryptedMessage = cipher.getDecryptedMessage(encryptedMessage);
+
+        LOG.debug("Original Message: {}, Encrypted Message: {}, Decrypted Message: {}", messageToEncrypt, encryptedMessage, decryptedMessage);
+        assertThat(decryptedMessage, is(messageToEncrypt));
+    }
+
 }

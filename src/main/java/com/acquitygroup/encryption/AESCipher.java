@@ -10,11 +10,11 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.security.*;
-import java.security.cert.CertificateException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 
 public class AESCipher {
 
@@ -33,10 +33,18 @@ public class AESCipher {
         this(key.getEncoded());
     }
 
+    public AESCipher(Key key, byte[] iv) {
+        this(key.getEncoded(), iv);
+    }
+
     public AESCipher(byte[] key) {
+        this(key, INITIAL_IV);
+    }
+
+    private AESCipher(byte[] key, byte[] iv) {
         try {
             this.secretKeySpec = new SecretKeySpec(key, "AES");
-            this.iv = new IvParameterSpec(INITIAL_IV);
+            this.iv = new IvParameterSpec(iv);
             this.cipher = Cipher.getInstance(ALGORITHM_AES256);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new RuntimeException(e);
