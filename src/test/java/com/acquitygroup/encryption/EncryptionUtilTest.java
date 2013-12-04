@@ -92,6 +92,24 @@ public class EncryptionUtilTest {
     }
 
     @Test
+    public void usingStringBasedIVWithUTF8ExtendedCharacter() {
+
+        thrown.expect(RuntimeException.class);
+        thrown.expectMessage("Wrong IV length: must be 16 bytes long");
+
+        Key key = KeystoreUtil.getKeyFromKeyStore("src/test/resources/aes-keystore.jck", "mystorepass", "jceksaes", "mykeypass");
+        String iv = "111111111111111\u1111";
+
+        AESCipher cipher = new AESCipher(key, iv.getBytes());
+
+        String encryptedMessage = cipher.getEncryptedMessage("this is message");
+        LOG.debug("Message is: {}", encryptedMessage);
+
+        assertThat(encryptedMessage, is(notNullValue()));
+        assertThat(encryptedMessage, is(not("this is message")));
+    }
+
+    @Test
     public void usingStringBasedIVWithIncorrectLength() {
 
         thrown.expect(RuntimeException.class);

@@ -1,3 +1,5 @@
+[Run](#run) | [How To Use](#howto) | [Generate AES-256 Key](#generate) | [View AES-256 Key](#view) | [Command Line Encrypt/Decrypt](#use)
+
 Overview:
 ===================
 This is a sample utility to encrypt/decrypt using AES/CBC/PKCS5Padding algorithm
@@ -11,14 +13,15 @@ _Most common error_: "Invalid Key Size" error is most likely caused by not updat
  - JDK must have the unlimited strength policy for the JDK version
 
 
-
-To Run:
+<a name="run"></a>To Run:
 ====================
 
     mvn clean test
 
 
-To Use:
+[Run](#run) | [How To Use](#howto) | [Generate AES-256 Key](#generate) | [View AES-256 Key](#view) | [Command Line Encrypt/Decrypt](#use)
+
+<a name="howto"></a>To Use:
 ====================
 
     # Key stored in JCEKS formatted Java keystore
@@ -29,25 +32,38 @@ To Use:
     String encryptedMessage = cipher.getEncryptedMessage("this is message");
     String decryptedMessage = cipher.getDecryptedMessage(encryptedMessage);
 
+    AESCipher cipherWithIv = new AESCipher(key, "0123456789012345".getBytes());
+    String encryptedMessage = cipherWithIv.getEncryptedMessage("this is message");
+    String decryptedMessage = cipherWithIv.getDecryptedMessage(encryptedMessage);
 
-Generate an AES-256 Key
+
+[Run](#run) | [How To Use](#howto) | [Generate AES-256 Key](#generate) | [View AES-256 Key](#view) | [Command Line Encrypt/Decrypt](#use)
+
+<a name="generate"></a>Generate an AES-256 Key
 ======================
 
     keytool -genseckey -alias jceksaes -keyalg AES -keysize 256 -storetype JCEKS -keypass mykeypass -storetype jceks -keystore aes-keystore.jck -storepass mystorepass
 
-View AES-256 Key in Keystore (Run with Maven)
-======================
 
-    mvn exec:java
+[Run](#run) | [How To Use](#howto) | [Generate AES-256 Key](#generate) | [View AES-256 Key](#view) | [Command Line Encrypt/Decrypt](#use)
 
-View AES-256 Key from command line
+<a name="view"></a>View AES-256 Key from command line
 ======================
 
     mvn clean package // generate executable JAR file
     java -Dkeystore=main-aes-keystore.jck -Dstorepass=mystorepass -Dalias=jceksaes -Dkeypass=mykeypass -jar target/example-encryption-util.jar
 
-Encrypt/Decrypt AES-256 from command line
+    // or optionally with Maven (using the above defaults)
+    mvn exec:java
+
+
+[Run](#run) | [How To Use](#howto) | [Generate AES-256 Key](#generate) | [View AES-256 Key](#view) | [Command Line Encrypt/Decrypt](#use)
+
+<a name="use"></a>Encrypt/Decrypt AES-256 from command line
 ======================
+
+    // Generate executable JAR with:  mvn package
+
     // Ideally the IV passed in (0000000000000000) would be randomly generated
     java -Dkeystore=main-aes-keystore.jck -Dstorepass=mystorepass -Dalias=jceksaes -Dkeypass=mykeypass -jar target/example-encryption-util.jar encrypt blahblahblah 0000000000000000
     java -Dkeystore=main-aes-keystore.jck -Dstorepass=mystorepass -Dalias=jceksaes -Dkeypass=mykeypass -jar target/example-encryption-util.jar decrypt baN3CIAcVgq+AQr7lvKmLw== 0000000000000000
@@ -55,3 +71,7 @@ Encrypt/Decrypt AES-256 from command line
 
     java -Dkeystore=main-aes-keystore.jck -Dstorepass=mystorepass -Dalias=jceksaes -Dkeypass=mykeypass -jar target/example-encryption-util.jar encrypt blahblahblah 0000000000000001
     java -Dkeystore=main-aes-keystore.jck -Dstorepass=mystorepass -Dalias=jceksaes -Dkeypass=mykeypass -jar target/example-encryption-util.jar decrypt Wcaov8LNN4GJvp1bvOTJ0g== 0000000000000001
+
+[Run](#run) | [How To Use](#howto) | [Generate AES-256 Key](#generate) | [View AES-256 Key](#view) | [Command Line Encrypt/Decrypt](#use)
+
+Copywrite &copy;2013 - Use of this code and it's concepts are considered a Proof-of-concept and should not be used directly in any environment
