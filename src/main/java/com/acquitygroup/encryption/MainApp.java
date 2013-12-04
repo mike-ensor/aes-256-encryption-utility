@@ -1,6 +1,5 @@
 package com.acquitygroup.encryption;
 
-import com.google.common.io.BaseEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +38,7 @@ public class MainApp {
         Key keyFromKeyStore = KeystoreUtil.getKeyFromKeyStore(keystoreFileLocation, storePass, alias, keyPass);
 
         String command = args[0];
+        String iv;
         AESCipher cipher;
         switch(command) {
             case "showKey":
@@ -47,31 +47,36 @@ public class MainApp {
                 break;
             case "encrypt":
                 checkArgument(args.length==3, "Command encryption takes 2 arguments: Message to encrypt and IV in String format");
-                cipher = new AESCipher(keyFromKeyStore);
                 LOG.debug("Encrypt({},{})", args[1], args[2]);
-                encrypt(cipher, args[1], args[2].getBytes());
+
+                iv = args[2];
+                cipher = new AESCipher(keyFromKeyStore, iv.getBytes());
+
+                encrypt(cipher, args[1]);
                 break;
             case "decrypt":
                 checkArgument(args.length==3, "Command decryption takes 2 arguments: Message to encrypt and IV in String format");
-                cipher = new AESCipher(keyFromKeyStore);
                 LOG.debug("Decrypt({},{})", args[1], args[2]);
-                decrypt(cipher, args[1], args[2].getBytes());
 
+                iv = args[2];
+                cipher = new AESCipher(keyFromKeyStore, iv.getBytes());
+
+                decrypt(cipher, args[1]);
         }
 
 
     }
 
-    private static void decrypt(AESCipher cipher, String message, byte[] iv) {
-        LOG.debug("Decrypting: " + message + " using IV:" + BaseEncoding.base64().encode(iv));
+    private static void decrypt(AESCipher cipher, String message) {
+        LOG.debug("Decrypting: " + message + " using IV:" + cipher.getIV());
 
         System.out.println("\n\nDecrypted Message\n=======================================");
         System.out.println(cipher.getDecryptedMessage(message));
         System.out.println("\n\n");
     }
 
-    private static void encrypt(AESCipher cipher, String message, byte[] iv) {
-        LOG.debug("Encrypting: " + message + " using IV:" + BaseEncoding.base64().encode(iv));
+    private static void encrypt(AESCipher cipher, String message) {
+        LOG.debug("Encrypting: " + message + " using IV:" + cipher.getIV());
 
         System.out.println("\n\nEncrypted Message\n=======================================");
         System.out.println(cipher.getEncryptedMessage(message));

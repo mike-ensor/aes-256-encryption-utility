@@ -1,8 +1,6 @@
 package com.acquitygroup.encryption;
 
 import com.google.common.io.BaseEncoding;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -22,21 +20,33 @@ public class AESCipher {
     // ECP, default
 //    private static final String ALGORITHM_AES256 = "AES";
     private static final byte[] INITIAL_IV = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    private static final Logger LOG = LoggerFactory.getLogger(AESCipher.class);
-
     private final SecretKeySpec secretKeySpec;
     private final Cipher cipher;
     private IvParameterSpec iv;
-    private Object key;
 
+    /**
+     * Create AESCipher based on existing {@link Key}
+     * @param key Key
+     */
     public AESCipher(Key key) {
         this(key.getEncoded());
     }
 
+    /**
+     * Create AESCipher based on existing {@link Key} and Initial Vector (iv) in bytes
+     * @param key Key
+     */
     public AESCipher(Key key, byte[] iv) {
         this(key.getEncoded(), iv);
     }
 
+    /**
+     * <p>Create AESCipher using a byte[] array as a key</p>
+     *
+     * <p><strong>NOTE:</strong> Uses an Initial Vector of 16 0x0 bytes. This should not be used to create strong security.</p>
+     *
+     * @param key Key
+     */
     public AESCipher(byte[] key) {
         this(key, INITIAL_IV);
     }
@@ -53,6 +63,7 @@ public class AESCipher {
 
     /**
      * Takes message and encrypts with Key
+     *
      * @param message String
      * @return String Base64 encoded
      */
@@ -70,6 +81,7 @@ public class AESCipher {
 
     /**
      * Takes Base64 encoded String and decodes with provided key
+     *
      * @param message String encoded with Base64
      * @return String
      */
@@ -87,7 +99,16 @@ public class AESCipher {
     }
 
     /**
+     * Get IV in Base64 Encoded String
+     * @return String Base64 Encoded
+     */
+    public String getIV() {
+        return BaseEncoding.base64().encode(iv.getIV());
+    }
+
+    /**
      * Base64 encoded version of key
+     *
      * @return String
      */
     public String getKey() {
