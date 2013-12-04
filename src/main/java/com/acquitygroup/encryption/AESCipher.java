@@ -1,5 +1,6 @@
 package com.acquitygroup.encryption;
 
+import com.google.common.base.Throwables;
 import com.google.common.io.BaseEncoding;
 
 import javax.crypto.BadPaddingException;
@@ -26,6 +27,7 @@ public class AESCipher {
 
     /**
      * Create AESCipher based on existing {@link Key}
+     *
      * @param key Key
      */
     public AESCipher(Key key) {
@@ -34,6 +36,7 @@ public class AESCipher {
 
     /**
      * Create AESCipher based on existing {@link Key} and Initial Vector (iv) in bytes
+     *
      * @param key Key
      */
     public AESCipher(Key key, byte[] iv) {
@@ -42,7 +45,7 @@ public class AESCipher {
 
     /**
      * <p>Create AESCipher using a byte[] array as a key</p>
-     *
+     * <p/>
      * <p><strong>NOTE:</strong> Uses an Initial Vector of 16 0x0 bytes. This should not be used to create strong security.</p>
      *
      * @param key Key
@@ -57,7 +60,7 @@ public class AESCipher {
             this.iv = new IvParameterSpec(iv);
             this.cipher = Cipher.getInstance(ALGORITHM_AES256);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-            throw new RuntimeException(e);
+            throw Throwables.propagate(e);
         }
     }
 
@@ -75,7 +78,7 @@ public class AESCipher {
 
             return BaseEncoding.base64().encode(encryptedTextBytes);
         } catch (IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException | InvalidKeyException | InvalidAlgorithmParameterException e) {
-            throw new RuntimeException(e);
+            throw Throwables.propagate(e);
         }
     }
 
@@ -94,12 +97,13 @@ public class AESCipher {
 
             return new String(decryptedTextBytes);
         } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e) {
-            throw new RuntimeException(e);
+            throw Throwables.propagate(e);
         }
     }
 
     /**
      * Get IV in Base64 Encoded String
+     *
      * @return String Base64 Encoded
      */
     public String getIV() {

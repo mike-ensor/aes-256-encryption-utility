@@ -7,14 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.Key;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class EncryptionUtilTest {
+public class AESCipherTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(EncryptionUtilTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AESCipherTest.class);
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -112,7 +113,7 @@ public class EncryptionUtilTest {
     @Test
     public void usingStringBasedIVWithIncorrectLength() {
 
-        thrown.expect(RuntimeException.class);
+        thrown.expectCause(isA(InvalidAlgorithmParameterException.class));
         thrown.expectMessage("Wrong IV length: must be 16 bytes long");
 
         Key key = KeystoreUtil.getKeyFromKeyStore("src/test/resources/aes-keystore.jck", "mystorepass", "jceksaes", "mykeypass");
