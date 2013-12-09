@@ -93,15 +93,15 @@ public class AESCipherTest {
     }
 
     @Test
-    public void usingStringBasedIVWithUTF8ExtendedCharacter() {
+    public void usingStringBasedIVWithUTF8ExtendedCharacter() throws UnsupportedEncodingException {
 
-        thrown.expect(RuntimeException.class);
+        thrown.expectCause(isA(InvalidAlgorithmParameterException.class));
         thrown.expectMessage("Wrong IV length: must be 16 bytes long");
 
         Key key = KeystoreUtil.getKeyFromKeyStore("src/test/resources/aes-keystore.jck", "mystorepass", "jceksaes", "mykeypass");
-        String iv = "111111111111111\u1111";
+        String iv = "111111111111111\u4111";
 
-        AESCipher cipher = new AESCipher(key, iv.getBytes());
+        AESCipher cipher = new AESCipher(key, iv.getBytes("UTF-8"));
 
         String encryptedMessage = cipher.getEncryptedMessage("this is message");
         LOG.debug("Message is: {}", encryptedMessage);
@@ -111,7 +111,7 @@ public class AESCipherTest {
     }
 
     @Test
-    public void usingStringBasedIVWithIncorrectLength() {
+    public void usingStringBasedIVWithIncorrectLength() throws UnsupportedEncodingException {
 
         thrown.expectCause(isA(InvalidAlgorithmParameterException.class));
         thrown.expectMessage("Wrong IV length: must be 16 bytes long");
@@ -119,7 +119,7 @@ public class AESCipherTest {
         Key key = KeystoreUtil.getKeyFromKeyStore("src/test/resources/aes-keystore.jck", "mystorepass", "jceksaes", "mykeypass");
         String iv = "11111111";
 
-        AESCipher cipher = new AESCipher(key, iv.getBytes());
+        AESCipher cipher = new AESCipher(key, iv.getBytes("UTF-8"));
 
         cipher.getEncryptedMessage("this is message");
     }
