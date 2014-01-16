@@ -51,7 +51,7 @@ _Most common error_: "Invalid Key Size" error is most likely caused by not updat
 ======================
 
     mvn clean package // generate executable JAR file
-    java -Dkeystore=main-aes-keystore.jck -Dstorepass=mystorepass -Dalias=jceksaes -Dkeypass=mykeypass -jar target/example-encryption-util.jar
+    java -Dkeystore=main-aes-keystore.jck -Dstorepass=mystorepass -Dalias=jceksaes -Dkeypass=mykeypass -jar target/example-encryption-util.jar <COMMAND like 'showKey'>
 
     // or optionally with Maven (using the above defaults)
     mvn exec:java
