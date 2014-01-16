@@ -116,7 +116,24 @@ public class AESCipher {
      * @return String
      */
     public String getKey() {
-        return BaseEncoding.base64().encode(secretKeySpec.getEncoded());
+        return getKey(KeyEncoding.BASE64);
+    }
+
+    public String getKey(KeyEncoding encoding) {
+        String result = null;
+        switch (encoding) {
+            case BASE64:
+                result = BaseEncoding.base64().encode(secretKeySpec.getEncoded());
+                break;
+            case HEX:
+                result = BaseEncoding.base16().encode(secretKeySpec.getEncoded());
+                break;
+            case BASE32:
+                result = BaseEncoding.base32().encode(secretKeySpec.getEncoded());
+                break;
+        }
+
+        return result;
     }
 
     private Cipher getCipher(int encryptMode) throws InvalidKeyException, InvalidAlgorithmParameterException {
@@ -127,4 +144,6 @@ public class AESCipher {
     private SecretKeySpec getSecretKeySpec() {
         return secretKeySpec;
     }
+
+
 }

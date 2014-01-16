@@ -84,10 +84,11 @@ public class MainApp {
     }
 
     private static void showKey(AESCipher cipher) {
-        String cipherKey = cipher.getKey();
 
         System.out.println("\n\nPrint SecretPrivateKey from JCEKS Keystore\n===========================================");
-        System.out.println("Key (Base64 Encoded): " + cipherKey);
+        System.out.println("Key (Base64 Encoded): " + cipher.getKey(KeyEncoding.BASE64));
+        System.out.println("Key (Hex Encoded): " + cipher.getKey(KeyEncoding.HEX));
+        System.out.println("Key (Base32 Encoded): " + cipher.getKey(KeyEncoding.BASE32));
 
     }
 }
